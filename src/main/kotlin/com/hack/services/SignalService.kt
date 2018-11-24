@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class SignalService(private val signalRepository: SignalRepository) {
 
-    fun createSignal(signalRequest: SignalRequest): Signal {
-        return signalRepository.save(signalRequest.toDomain())
-    }
+//    fun createSignal(signalRequest: SignalRequest): Signal {
+//        return signalRepository.save(signalRequest.toDomain())
+//    }
 }
