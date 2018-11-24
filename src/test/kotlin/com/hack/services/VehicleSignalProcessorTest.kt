@@ -85,27 +85,27 @@ class VehicleSignalProcessorTest {
     fun `should return RED when no vehicles are waiting on signal`() {
         val signals = listOf(signal1, signal2, signalWithNoPassenger)
 
-        assertEquals(SignalStatus.RED, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal1, SignalStatus.RED))
+        assertEquals(SignalStatus.RED, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal1, SignalStatus.RED).status)
     }
 
     @Test
     fun `should return GREEN when max allowed vehicle to wait limit is crossed`() {
         val signals = listOf(signal1, signal2, signalWithNoPassenger)
 
-        assertEquals(SignalStatus.GREEN, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal2, SignalStatus.RED))
+        assertEquals(SignalStatus.GREEN, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal2, SignalStatus.RED).status)
     }
 
     @Test
     fun `should return current status when there is still time to complete the signal`() {
         val signals = listOf(signal1, signal3, signalWithNoPassenger)
 
-        assertEquals(SignalStatus.GREEN, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal3, SignalStatus.GREEN))
+        assertEquals(SignalStatus.GREEN, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal3, SignalStatus.GREEN).status)
     }
 
     @Test
     fun `should return next status when time in current status is elapsed`() {
         val signals = listOf(signal1, signal4, signalWithNoPassenger)
 
-        assertEquals(SignalStatus.YELLOW, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal4, SignalStatus.YELLOW))
+        assertEquals(SignalStatus.YELLOW, VehicleSignalProcessor.getVehicleSignalStatus(signals, signal4, SignalStatus.YELLOW).status)
     }
 }

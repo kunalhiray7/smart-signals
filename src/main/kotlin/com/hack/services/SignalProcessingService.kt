@@ -1,33 +1,55 @@
 package com.hack.services
 
 import com.hack.domain.SignalStatus
-import com.hack.models.SensorProcessRequest
-import com.hack.models.SensorProcessingResponse
-import com.hack.models.SignalRequest
-import com.hack.models.SignalResponse
+import com.hack.models.*
 import org.springframework.stereotype.Service
 
 @Service
 class SignalProcessingService {
 
-    fun process(sensorProcessRequest: SensorProcessRequest): SensorProcessingResponse =
-            SensorProcessingResponse(
-                    routeId = sensorProcessRequest.routeId,
-                    signals = sensorProcessRequest.signals.map { processSignal(sensorProcessRequest.signals, it) }
-            )
+    private var sensorProcessingResponse = SensorProcessingResponse()
 
-    private fun processSignal(signals: List<SignalRequest>, currentSignal: SignalRequest): SignalResponse =
-            SignalResponse(
-                    id = currentSignal.id,
-                    isPedestrianSignal = currentSignal.isPedestrianSignal,
-                    nextStatus = determineStatus(signals, currentSignal),
-                    durationToNextStatus = determineDuration(signals, currentSignal)
-            )
+    fun process(sensorProcessRequest: SensorProcessRequest): SensorProcessingResponse {
+        this.sensorProcessingResponse = SensorProcessingResponse(
+                routeId = sensorProcessRequest.routeId,
+                signals = sensorProcessRequest.signals.map { processSignal(sensorProcessRequest.signals, it) }
+        )
 
-    private fun determineDuration(signals: List<SignalRequest>, currentSignal: SignalRequest): Long {
-        return 0L
+        getFinalOutput()
+
+        return this.sensorProcessingResponse
     }
 
-    private fun determineStatus(signals: List<SignalRequest>, currentSignal: SignalRequest): SignalStatus =
+    fun getCurrentStatus(): SensorProcessingResponse {
+        getFinalOutput()
+
+        return this.sensorProcessingResponse
+    }
+
+    private fun processSignal(signals: List<SignalRequest>, currentSignal: SignalRequest): SignalResponse {
+        val signalDurationStatus = determineStatus(signals, currentSignal)
+        return SignalResponse(
+                id = currentSignal.id,
+                isPedestrianSignal = currentSignal.isPedestrianSignal,
+                nextStatus = signalDurationStatus.status,
+                durationToNextStatus = signalDurationStatus.duration
+        )
+    }
+
+    private fun determineStatus(signals: List<SignalRequest>, currentSignal: SignalRequest): SignalDurationStatus =
             currentSignal.currentStatus.getNextStatus(signals, currentSignal)
+
+    private fun getFinalOutput() {
+        val pedestrianSignalStatus = this.sensorProcessingResponse.signals.find { it.isPedestrianSignal }!!.nextStatus
+
+        this.sensorProcessingResponse.signals.forEach {
+            if(!it.isPedestrianSignal) {
+                when (pedestrianSignalStatus) {
+                    SignalStatus.GREEN -> it.nextStatus = SignalStatus.RED
+                    SignalStatus.RED -> it.nextStatus = SignalStatus.GREEN
+                    SignalStatus.YELLOW -> it.nextStatus = SignalStatus.RED
+                }
+            }
+        }
+    }
 }
