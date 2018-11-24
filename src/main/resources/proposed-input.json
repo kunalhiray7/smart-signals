@@ -1,0 +1,70 @@
+{
+  "routeId": "fghj7890ertyucv3456",
+  "signals": [
+    {
+      "id": "s1",
+      "isPedestrianSignal": false,
+      "currentStatus": "RED",
+      "configuredRedDuration": 60,
+      "configuredGreenDuration": 60,
+      "configuredYellowDuration": 10,
+      "secondsInCurrentStatus": 25,
+      "vehicles": [
+        {
+          "speedInKph": 0,
+          "distanceToSignalInMeters": 0,
+          "status": "STATIONARY"
+        },
+        {
+          "speedInKph": 25,
+          "distanceToSignalInMeters": 10,
+          "status": "MOVING"
+        },
+        {
+          "speedInKph": 100,
+          "distanceToSignalInMeters": 40,
+          "status": "MOVING"
+        }
+      ],
+      "pedestrians": 0
+    },
+    {
+      "id": "s2",
+      "isPedestrianSignal": false,
+      "currentStatus": "GREEN",
+      "configuredRedDuration": 40,
+      "configuredGreenDuration": 60,
+      "configuredYellowDuration": 10,
+      "secondsInCurrentStatus": 35,
+      "vehicles": [
+        {
+          "speedInKph": 50,
+          "distanceToSignalInMeters": 0,
+          "status": "MOVING"
+        },
+        {
+          "speedInKph": 50,
+          "distanceToSignalInMeters": 10,
+          "status": "MOVING"
+        },
+        {
+          "speedInKph": 100,
+          "distanceToSignalInMeters": 40,
+          "status": "MOVING"
+        }
+      ],
+      "pedestrians": 0
+    },
+    {
+      "id": "s3",
+      "isPedestrianSignal": true,
+      "currentStatus": "RED",
+      "configuredRedDuration": 60,
+      "configuredGreenDuration": 30,
+      "configuredYellowDuration": 10,
+      "secondsInCurrentStatus": 35,
+      "vehicles": [],
+      "pedestrians": 5
+    }
+  ]
+}

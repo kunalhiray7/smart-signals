@@ -4,7 +4,7 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
 @Entity
-@Table(name = "signals", uniqueConstraints=[(UniqueConstraint(columnNames = ["routeName"]))])
+@Table(name = "signals", uniqueConstraints=[(UniqueConstraint(columnNames = ["routeId"]))])
 class Signal (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
