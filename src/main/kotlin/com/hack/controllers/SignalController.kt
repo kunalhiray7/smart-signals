@@ -27,5 +27,6 @@ class SignalController(private val signalProcessingService: SignalProcessingServ
     }
 
     @GetMapping("/signals/v2")
-    fun getProcessedSignalsForUi(): SensorProcessingResponse = signalProcessingService.getCurrentStatus()
+    fun getProcessedSignalsForUi(): SensorProcessingResponse = trafficDataService.getTrafficSignalDataJson()
+
 }

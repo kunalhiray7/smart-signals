@@ -54,14 +54,27 @@ class TrafficDataService() {
         return transformSignalsData(sensorProcessingResponse)
     }
 
+
+    fun getTrafficSignalDataJson(): SensorProcessingResponse {
+
+        val sensorProcessRequest = SensorProcessRequest(routeId = "routeId",
+                signals = getSignalsData()
+        )
+        return  signalProcessingService.process(sensorProcessRequest)
+    }
+
     private fun transformSignalsData(sensorProcessingResponse: SensorProcessingResponse): String {
         var defaultOutput = "" //"R,G,G,30"
         var duration = 30L
         sensorProcessingResponse.signals.forEach { signalResponse ->
             if (signalResponse.id == "1") {
-                duration = signalResponse.durationToNextStatus
+                if(signalResponse.durationToNextStatus>0) {
+                    duration = signalResponse.durationToNextStatus
+                } else {
+                    duration = 0
+                }
             }
-            defaultOutput += signalResponse.nextStatus
+            defaultOutput = defaultOutput + signalResponse.nextStatus + ","
         }
         defaultOutput += duration
         return defaultOutput
