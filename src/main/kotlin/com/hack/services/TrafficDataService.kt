@@ -18,29 +18,27 @@ class TrafficDataService() {
     fun postSensorData(postSernsorDataRequest: PostSensorDataRequest) {
         if (postSernsorDataRequest.signalPostId == "1") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus1 = currentSignalStatus1.copy(pedestrians = 1, changeDate = Instant.now())
+                currentSignalStatus1 = currentSignalStatus1.copy(pedestrians = 6, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                if(currentSignalStatus1.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
+                if (currentSignalStatus1.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
                     currentSignalStatus1 = currentSignalStatus1.copy(pedestrians = 0, changeDate = Instant.now())
                 }
             }
         }
         if (postSernsorDataRequest.signalPostId == "2") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus2 = currentSignalStatus2.copy(pedestrians = 1, changeDate = Instant.now())
+                currentSignalStatus2 = currentSignalStatus2.copy(pedestrians = 6, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                if(currentSignalStatus2.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
+                if (currentSignalStatus2.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
                     currentSignalStatus2 = currentSignalStatus2.copy(pedestrians = 0, changeDate = Instant.now())
                 }
             }
         }
         if (postSernsorDataRequest.signalPostId == "3") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 1, changeDate = Instant.now())
+                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 6, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                if(currentSignalStatus3.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
-                    currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 0, changeDate = Instant.now())
-                }
+                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 0, changeDate = Instant.now())
             }
         }
     }
@@ -60,7 +58,7 @@ class TrafficDataService() {
         val sensorProcessRequest = SensorProcessRequest(routeId = "routeId",
                 signals = getSignalsData()
         )
-        return  signalProcessingService.process(sensorProcessRequest)
+        return signalProcessingService.process(sensorProcessRequest)
     }
 
     private fun transformSignalsData(sensorProcessingResponse: SensorProcessingResponse): String {
@@ -68,7 +66,7 @@ class TrafficDataService() {
         var duration = 30L
         sensorProcessingResponse.signals.forEach { signalResponse ->
             if (signalResponse.id == "1") {
-                if(signalResponse.durationToNextStatus>0) {
+                if (signalResponse.durationToNextStatus > 0) {
                     duration = signalResponse.durationToNextStatus
                 } else {
                     duration = 0
