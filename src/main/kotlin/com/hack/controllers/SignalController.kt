@@ -1,24 +1,25 @@
 package com.hack.controllers
 
-import com.hack.domain.Signal
 import com.hack.models.SensorProcessRequest
-import com.hack.models.SignalRequest
+import com.hack.models.microProcessor.PostSensorDataRequest
 import com.hack.services.SignalService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import com.hack.services.TrafficDataService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class SignalController(private val signalService: SignalService) {
 
-//    @PostMapping("/signals")
-//    fun create(@RequestBody signalRequest: SignalRequest): Signal {
-//        return signalService.createSignal(signalRequest)
-//    }
+    @Autowired
+    private lateinit var trafficDataService: TrafficDataService
 
-    @PutMapping("/signals/process")
-    fun processSensorData(@RequestBody sensorProcessRequest: SensorProcessRequest) {
+    @PutMapping("/signals/{signalId}/{signalSent}")
+    fun processSensorData(@PathVariable("signalId") signalId: String, @PathVariable("signalSent") signalSent: String) {
+        trafficDataService.prepareData(PostSensorDataRequest(signalId, signalSent))
+    }
 
+    @GetMapping("/signals")
+    fun getTrafficSignalData(): String{
+        return trafficDataService.getTrafficSignalData()
     }
 }
