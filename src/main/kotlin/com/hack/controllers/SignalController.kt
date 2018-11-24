@@ -1,7 +1,6 @@
 package com.hack.controllers
 
 import com.hack.models.microProcessor.PostSensorDataRequest
-import com.hack.services.SignalService
 import com.hack.services.TrafficDataService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SignalController(private val signalService: SignalService) {
+class SignalController() {
 
     @Autowired
     private lateinit var trafficDataService: TrafficDataService

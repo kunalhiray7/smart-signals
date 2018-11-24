@@ -5,7 +5,9 @@ import com.hack.models.SensorProcessRequest
 import com.hack.models.SensorProcessingResponse
 import com.hack.models.SignalRequest
 import com.hack.models.SignalResponse
+import org.springframework.stereotype.Service
 
+@Service
 class SignalProcessingService {
 
     fun process(sensorProcessRequest: SensorProcessRequest): SensorProcessingResponse =
