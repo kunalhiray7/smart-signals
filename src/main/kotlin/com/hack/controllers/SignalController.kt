@@ -1,6 +1,8 @@
 package com.hack.controllers
 
+import com.hack.models.SensorProcessingResponse
 import com.hack.models.microProcessor.PostSensorDataRequest
+import com.hack.services.SignalProcessingService
 import com.hack.services.SignalService
 import com.hack.services.TrafficDataService
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SignalController(private val signalService: SignalService) {
+class SignalController(private val signalService: SignalService,
+                       private val signalProcessingService: SignalProcessingService) {
 
     @Autowired
     private lateinit var trafficDataService: TrafficDataService
@@ -24,4 +27,7 @@ class SignalController(private val signalService: SignalService) {
     fun getTrafficSignalData(): String{
         return trafficDataService.getTrafficSignalData()
     }
+
+    @GetMapping("/signals/v2")
+    fun getProcessedSignalsForUi(): SensorProcessingResponse = signalProcessingService.getCurrentStatus()
 }
