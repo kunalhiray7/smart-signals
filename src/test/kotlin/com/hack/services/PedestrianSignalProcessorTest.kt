@@ -97,27 +97,31 @@ class PedestrianSignalProcessorTest {
     fun `should return RED when no passengers are waiting for signal`() {
         val signals = listOf(signal1, signal2, signalWithNoPassenger)
 
-        assertEquals(SignalStatus.RED, PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithNoPassenger, SignalStatus.RED))
+        assertEquals(SignalStatus.RED,
+                PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithNoPassenger, SignalStatus.RED).status)
     }
 
     @Test
     fun `should return GREEN when max allowed pedestrians to wait limit is crossed`() {
         val signals = listOf(signal1, signal2, signalWithMaxPedestrians)
 
-        assertEquals(SignalStatus.GREEN, PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithMaxPedestrians, SignalStatus.RED))
+        assertEquals(SignalStatus.GREEN,
+                PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithMaxPedestrians, SignalStatus.RED).status)
     }
 
     @Test
     fun `should return current status when there is still time to complete the signal`() {
         val signals = listOf(signal1, signal2, signalWithTimeToComplete)
 
-        assertEquals(SignalStatus.RED, PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithTimeToComplete, SignalStatus.RED))
+        assertEquals(SignalStatus.RED,
+                PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithTimeToComplete, SignalStatus.RED).status)
     }
 
     @Test
     fun `should return next status when time in current status is elapsed`() {
         val signals = listOf(signal1, signal2, signalWithNoTime)
 
-        assertEquals(SignalStatus.GREEN, PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithNoTime, SignalStatus.GREEN))
+        assertEquals(SignalStatus.GREEN,
+                PedestrianSignalProcessor.getPedestrianSignalStatus(signals, signalWithNoTime, SignalStatus.GREEN).status)
     }
 }
