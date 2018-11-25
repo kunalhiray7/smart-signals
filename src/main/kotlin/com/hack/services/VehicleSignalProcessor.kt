@@ -14,10 +14,15 @@ class VehicleSignalProcessor {
                 currentSignal.vehicles.size >= Constants.MAX_VEHICLE_ALLOWED_TO_WAIT -> status = SignalStatus.GREEN
                 currentSignal.secondsInCurrentStatus > 0 -> status = currentSignal.currentStatus
             }
+            var duration = currentSignal.currentStatus.getConfigureDuration(currentSignal) - currentSignal.secondsInCurrentStatus
+            if(duration <0){
+                duration = 0
+            }
 
             return SignalDurationStatus(
                     status = status,
-                    duration = currentSignal.currentStatus.getConfigureDuration(currentSignal) - currentSignal.secondsInCurrentStatus)
+                    duration = duration)
+
         }
     }
 }

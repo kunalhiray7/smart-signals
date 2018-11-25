@@ -66,11 +66,7 @@ class TrafficDataService() {
         var duration = 30L
         sensorProcessingResponse.signals.forEach { signalResponse ->
             if (signalResponse.id == "1") {
-                if (signalResponse.durationToNextStatus > 0) {
-                    duration = signalResponse.durationToNextStatus
-                } else {
-                    duration = 0
-                }
+                duration = signalResponse.durationToNextStatus
             }
             defaultOutput = defaultOutput + signalResponse.nextStatus + ","
         }
