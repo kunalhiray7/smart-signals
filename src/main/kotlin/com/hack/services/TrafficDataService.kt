@@ -92,13 +92,13 @@ class TrafficDataService() {
                         currentSignalStatus1.currentStatus,
                         Instant.now().epochSecond - currentSignalStatus1.changeDate.epochSecond,
                         20L, 60L, 5L,
-                        listOf(Vehicle(40L, 5, Status.STATIONARY)), currentSignalStatus1.pedestrians
+                        currentSignalStatus1.vehicles, 0
                 ),
                 SignalRequest(currentSignalStatus2.signalId, currentSignalStatus2.isPedestrianSignal,
                         currentSignalStatus2.currentStatus,
                         Instant.now().epochSecond - currentSignalStatus2.changeDate.epochSecond,
                         20L, 60L, 5L,
-                        listOf(Vehicle(40L, 5, Status.STATIONARY)), currentSignalStatus2.pedestrians
+                        currentSignalStatus1.vehicles, 0
                 ),
                 SignalRequest(currentSignalStatus3.signalId, currentSignalStatus3.isPedestrianSignal,
                         currentSignalStatus3.currentStatus,
