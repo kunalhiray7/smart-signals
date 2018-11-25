@@ -17,11 +17,11 @@ class TrafficDataService() {
 
     fun postSensorData(postSernsorDataRequest: PostSensorDataRequest) {
         if (postSernsorDataRequest.signalPostId == "1") {
-            if (postSernsorDataRequest.signalSent == "1") {
+            if (Integer.parseInt(postSernsorDataRequest.signalSent) > currentSignalStatus1.vehicles.size) {
                 val newVehicles = currentSignalStatus1.vehicles
                 newVehicles.add(getVehicle())
                 currentSignalStatus1 = currentSignalStatus1.copy(vehicles = newVehicles, changeDate = Instant.now())
-            } else if (postSernsorDataRequest.signalSent == "0") {
+            } else if (Integer.parseInt(postSernsorDataRequest.signalSent) <= currentSignalStatus1.vehicles.size) {
                 val newVehicles = currentSignalStatus1.vehicles
                 if(newVehicles.size >0) {
                     newVehicles.removeAt(0)
@@ -30,11 +30,11 @@ class TrafficDataService() {
             }
         }
         if (postSernsorDataRequest.signalPostId == "2") {
-            if (postSernsorDataRequest.signalSent == "1") {
+            if (Integer.parseInt(postSernsorDataRequest.signalSent) > currentSignalStatus2.vehicles.size) {
                 val newVehicles = currentSignalStatus2.vehicles
                 newVehicles.add(getVehicle())
                 currentSignalStatus2 = currentSignalStatus2.copy(vehicles = newVehicles, changeDate = Instant.now())
-            } else if (postSernsorDataRequest.signalSent == "0") {
+            } else if (Integer.parseInt(postSernsorDataRequest.signalSent) > currentSignalStatus2.vehicles.size) {
                 val newVehicles = currentSignalStatus2.vehicles
                 if(newVehicles.size >0) {
                     newVehicles.removeAt(0)
@@ -43,16 +43,18 @@ class TrafficDataService() {
             }
         }
         if (postSernsorDataRequest.signalPostId == "3") {
-            if (postSernsorDataRequest.signalSent == "1") {
+            if (Integer.parseInt(postSernsorDataRequest.signalSent) > currentSignalStatus3.pedestrians) {
                 currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = currentSignalStatus3.pedestrians+1, changeDate = Instant.now())
-            } else if (postSernsorDataRequest.signalSent == "0") {
+            } else if (Integer.parseInt(postSernsorDataRequest.signalSent) <= currentSignalStatus3.pedestrians) {
                 var pedestriansNumber = currentSignalStatus3.pedestrians
                 if(pedestriansNumber>0){
-                    pedestriansNumber = pedestriansNumber -1
+                    pedestriansNumber -= 1
                 }
                 currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = pedestriansNumber, changeDate = Instant.now())
             }
         }
+
+        getTrafficSignalDataJson()
     }
 
     fun getTrafficSignalData(): String {

@@ -10,6 +10,12 @@ class SignalProcessingService {
     private var sensorProcessingResponse = SensorProcessingResponse()
 
     fun process(sensorProcessRequest: SensorProcessRequest): SensorProcessingResponse {
+        println(sensorProcessRequest.signals[0].vehicles.size)
+        println(sensorProcessRequest.signals[0].pedestrians)
+        println(sensorProcessRequest.signals[1].vehicles.size)
+        println(sensorProcessRequest.signals[1].pedestrians)
+        println(sensorProcessRequest.signals[2].vehicles.size)
+        println(sensorProcessRequest.signals[2].pedestrians)
         this.sensorProcessingResponse = SensorProcessingResponse(
                 routeId = sensorProcessRequest.routeId,
                 signals = sensorProcessRequest.signals.map { processSignal(sensorProcessRequest.signals, it) }
