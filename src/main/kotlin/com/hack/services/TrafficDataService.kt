@@ -18,27 +18,39 @@ class TrafficDataService() {
     fun postSensorData(postSernsorDataRequest: PostSensorDataRequest) {
         if (postSernsorDataRequest.signalPostId == "1") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus1 = currentSignalStatus1.copy(pedestrians = 6, changeDate = Instant.now())
+                val newVehicles = currentSignalStatus1.vehicles
+                newVehicles.add(getVehicle())
+                currentSignalStatus1 = currentSignalStatus1.copy(vehicles = newVehicles, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                if (currentSignalStatus1.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
-                    currentSignalStatus1 = currentSignalStatus1.copy(pedestrians = 0, changeDate = Instant.now())
+                val newVehicles = currentSignalStatus1.vehicles
+                if(newVehicles.size >0) {
+                    newVehicles.removeAt(0)
                 }
+                currentSignalStatus1 = currentSignalStatus1.copy(vehicles = newVehicles, changeDate = Instant.now())
             }
         }
         if (postSernsorDataRequest.signalPostId == "2") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus2 = currentSignalStatus2.copy(pedestrians = 6, changeDate = Instant.now())
+                val newVehicles = currentSignalStatus2.vehicles
+                newVehicles.add(getVehicle())
+                currentSignalStatus2 = currentSignalStatus2.copy(vehicles = newVehicles, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                if (currentSignalStatus2.changeDate.epochSecond - Instant.now().epochSecond > SecondsToWaitBeforeAssumingNoMovement) {
-                    currentSignalStatus2 = currentSignalStatus2.copy(pedestrians = 0, changeDate = Instant.now())
+                val newVehicles = currentSignalStatus2.vehicles
+                if(newVehicles.size >0) {
+                    newVehicles.removeAt(0)
                 }
+                currentSignalStatus2 = currentSignalStatus2.copy(vehicles = newVehicles, changeDate = Instant.now())
             }
         }
         if (postSernsorDataRequest.signalPostId == "3") {
             if (postSernsorDataRequest.signalSent == "1") {
-                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 6, changeDate = Instant.now())
+                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = currentSignalStatus3.pedestrians+1, changeDate = Instant.now())
             } else if (postSernsorDataRequest.signalSent == "0") {
-                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = 0, changeDate = Instant.now())
+                var pedestriansNumber = currentSignalStatus3.pedestrians
+                if(pedestriansNumber>0){
+                    pedestriansNumber = pedestriansNumber -1
+                }
+                currentSignalStatus3 = currentSignalStatus3.copy(pedestrians = pedestriansNumber, changeDate = Instant.now())
             }
         }
     }
@@ -98,10 +110,14 @@ class TrafficDataService() {
         )
     }
 
+    private fun getVehicle(): Vehicle {
+        return Vehicle(40L, 5, Status.STATIONARY)
+    }
+
     companion object {
-        private var currentSignalStatus1: CurrentSignalStatus = CurrentSignalStatus("1", false, SignalStatus.GREEN, Instant.now(), 0)
-        private var currentSignalStatus2: CurrentSignalStatus = CurrentSignalStatus("2", false, SignalStatus.GREEN, Instant.now(), 0)
-        private var currentSignalStatus3: CurrentSignalStatus = CurrentSignalStatus("3", true, SignalStatus.RED, Instant.now(), 0)
+        private var currentSignalStatus1: CurrentSignalStatus = CurrentSignalStatus("1", false, SignalStatus.GREEN, Instant.now(), 0, mutableListOf())
+        private var currentSignalStatus2: CurrentSignalStatus = CurrentSignalStatus("2", false, SignalStatus.GREEN, Instant.now(), 0, mutableListOf())
+        private var currentSignalStatus3: CurrentSignalStatus = CurrentSignalStatus("3", true, SignalStatus.RED, Instant.now(), 0, mutableListOf())
 
 
         private val SecondsToWaitBeforeAssumingNoMovement = 10
@@ -114,6 +130,7 @@ data class CurrentSignalStatus(
         val isPedestrianSignal: Boolean,
         val currentStatus: SignalStatus,
         val changeDate: Instant,
-        val pedestrians: Long
+        val pedestrians: Long,
+        val vehicles: MutableList<Vehicle>
 
 )
